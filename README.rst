@@ -172,6 +172,20 @@ the helper; raw embeddings remain available. Interpolated positions are visual
 approximations between the computed embeddings, rather than freshly optimized
 DREAMS solutions. The notebook compares local/global quality at the real keyframes.
 
+Both DREAMS and the separate ``ne_spectrum/`` implementation now display the
+paper's quality metrics inside their slider boxes: 10-neighbor recall over all
+observations and Spearman distance correlation among 1,000 fixed sampled
+observations. The same feature arrays and sampled original IDs are used for both
+techniques. Scores are evaluated along a dense grid of actual interpolated
+layouts, including every keyframe. Browser lookup between samples is approximate
+and marked with an approx sign. Camera cropping does not change these whole-layout
+scores. Metric curves and provenance live in ``artifacts/quality_metrics/``.
+The original endpoint CSV reports retain their legacy 700-observation sample.
+
+The independent NE-spectrum notebook, environment, maps and GIFs are documented
+in ``ne_spectrum/README.rst``. It uses the authors' native attraction-exaggeration
+sweep and upstream openTSNE, leaving the DREAMS fits and environment intact.
+
 The examples use class/topic colors and image/document tooltips. Position-dependent
 labels, hulls, edges, density tiles, minimaps, annotations and lasso indices require
 their own updates and should not be enabled yet. Updating coordinates globally can

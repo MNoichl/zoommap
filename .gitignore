@@ -21,3 +21,4 @@ artifacts/*
 !artifacts/mnist_report.csv
 !artifacts/20_newsgroups_report.csv
 !artifacts/general_example_report.csv
+!artifacts/quality_metrics/

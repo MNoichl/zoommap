@@ -1,0 +1,17 @@
+# Run from zoommap/: uv pip install --python ne_spectrum/.venv/bin/python -r ne_spectrum/requirements.txt
+# Upstream openTSNE is isolated from the DREAMS fork in ../.venv.
+ne-spectrum @ git+https://github.com/sciai-lab/ne-spectrum.git@c980702a2594ee628fc86c36902f8c699c80b67e
+openTSNE==1.0.4
+contrastive-ne==0.4.0
+datamapplot @ git+https://github.com/TutteInstitute/datamapplot.git@81e9f4283ac97f68b93aa5490ef0278613529b45
+-e .[notebook,test]
+# Match preprocessing and MPNet cache identity with the DREAMS examples.
+numpy==2.5.3
+scipy==1.18.1
+pandas==2.3.3
+scikit-learn==1.9.1
+matplotlib==3.10.9
+torch==2.14.1
+sentence-transformers==5.7.0
+transformers==5.19.0
+setuptools==80.10.2

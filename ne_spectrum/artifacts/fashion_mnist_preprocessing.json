@@ -1,0 +1,9 @@
+{
+  "subset": "train",
+  "pixel_scale": "divide by 255",
+  "pca_components": 50,
+  "pca_explained_variance": 0.8649453286260812,
+  "seed": 42,
+  "requested_sample_size": 5000,
+  "actual_sample_size": 5000
+}
