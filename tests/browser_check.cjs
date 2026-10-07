@@ -8,6 +8,7 @@ const { chromium } = require('playwright');
 const baseUrl = process.env.ZOOMMAP_BASE_URL || 'http://127.0.0.1:8788';
 const chrome = process.env.CHROME_EXECUTABLE_PATH;
 const names = ['fashion_mnist', 'mnist', '20_newsgroups'];
+const titles = ['Fashion-MNIST', 'MNIST', '20 Newsgroups · MPNet'];
 
 async function waitForLayout(context, zoom) {
   await context.waitForFunction(z => {
@@ -39,8 +40,14 @@ async function waitForLayout(context, zoom) {
         };
       });
       assert.equal(initial.count, 5000);
-      assert.equal(await page.title(), 'From global to local');
-      assert.equal(await page.locator('#dataset-heading h1').innerText(), 'From global to local');
+      const title = 'From global to local · ' + titles[names.indexOf(name)];
+      assert.equal(await page.title(), title);
+      assert.equal(await page.locator('#dataset-heading h1').innerText(), title);
+      assert.equal(await page.locator('.dataset-eyebrow').count(), 0);
+      assert.equal(await page.locator('#dataset-heading p').innerText(),
+        'Zoom from a global PCA layout through DREAMS toward local t-SNE structure.');
+      assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
+        'rgb(239, 240, 235)');
       for (const zoom of await page.evaluate(() => zoomPositions.zooms)) {
         await page.evaluate(z => zoomPositions.setZoom(z), zoom);
         await waitForLayout(page, zoom);
@@ -114,7 +121,8 @@ async function waitForLayout(context, zoom) {
       await frame.evaluate(() => zoomPositions.setZoom(1.25));
       await waitForLayout(frame, 1.25);
       assert((await frame.locator('#zoom-layout-status').innerText()).includes('λ=0.15'));
-      assert.equal(await frame.locator('#dataset-heading h1').innerText(), 'From global to local');
+      assert.equal(await frame.locator('#dataset-heading h1').innerText(),
+        'From global to local · ' + titles[i]);
       console.log('PASS notebook iframe: ' + names[i]);
     }
     assert.deepEqual(errors, []);

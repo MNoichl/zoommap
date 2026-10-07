@@ -69,6 +69,17 @@ Edit ``DATASETS`` to run a subset, or ``SAMPLE_SIZE`` for a different sample siz
 ``PARALLEL_DATASETS`` controls concurrent sweeps and ``N_JOBS`` optimizer threads.
 Changing zoom spacing or interpolation reuses existing fitted layouts.
 
+Plot styling uses ``opinionated`` and its ``opinionated_j`` (Jost) preset. The
+notebook registers the fonts bundled with the package and applies its Matplotlib
+stylesheet; the interactive maps use Jost through DataMapPlot's existing font
+parameters and the example CSS, with the bundled Jost font embedded in each HTML
+map. An example helper removes duplicate CDN font declarations from the generated
+HTML before saving and displaying it. Figures have no overall title and use
+11-point subplot titles; figures and maps share the ``#eff0eb`` background. The
+notebook environment pins Opinionated 0.0.3.0,
+Matplotlib below 3.11 (the package uses ``matplotlib.style.core``), and setuptools
+below 81 (the package imports ``pkg_resources``).
+
 Repository structure
 --------------------
 
@@ -174,4 +185,5 @@ https://arxiv.org/abs/2508.13747,
 https://github.com/zalandoresearch/fashion-mnist,
 https://www.tensorflow.org/datasets/catalog/mnist,
 https://scikit-learn.org/stable/datasets/real_world.html#the-20-newsgroups-text-dataset,
-https://huggingface.co/sentence-transformers/all-mpnet-base-v2.
+https://huggingface.co/sentence-transformers/all-mpnet-base-v2,
+https://github.com/MNoichl/opinionated.

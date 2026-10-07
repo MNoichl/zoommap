@@ -69,12 +69,12 @@ def pca_features(images, seed=42):
     return features, pca
 
 
-IMAGE_TOOLTIP = """<div style="padding:10px;font-family:system-ui;text-align:center">
+IMAGE_TOOLTIP = """<div style="padding:10px;font-family:inherit;text-align:center">
 <img src="{thumbnail}" width="84" height="84" style="image-rendering:pixelated;border-radius:5px">
 <div style="margin-top:8px;font-weight:600">{class_name}</div>
 <div style="font-size:11px;opacity:0.65">{dataset_name} sample {sample_id}</div></div>"""
 
-TEXT_TOOLTIP = """<div style="padding:12px;font-family:system-ui;max-width:380px">
+TEXT_TOOLTIP = """<div style="padding:12px;font-family:inherit;max-width:380px">
 <strong>{class_name}</strong><div style="font-size:11px;opacity:0.65;margin:5px 0">
 20 Newsgroups document {sample_id}</div>
 <div style="font-size:12px;line-height:1.45;white-space:pre-wrap;max-height:260px;overflow:auto">{preview}</div>

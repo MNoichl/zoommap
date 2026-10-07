@@ -184,13 +184,13 @@ def quality_scores(features, layouts, seed=42, k=10):
 
 
 EXAMPLE_CSS = """
-body { background: #f7f8fc; color: #182238; font-family: system-ui, sans-serif; }
+body { background: #eff0eb; color: #182238; font-family: "Jost", sans-serif; }
 #dataset-heading { position: fixed; top: 30px; left: 36px; pointer-events: none;
-  padding: 10px 18px 12px 0; background: linear-gradient(90deg, #f7f8fcf5 75%, #f7f8fc00); }
-.dataset-eyebrow { font-size: 10px; letter-spacing: 2px; color: #75829a; font-weight: 650; }
+  max-width: calc(100vw - 320px); padding: 10px 18px 12px 0;
+  background: linear-gradient(90deg, #eff0ebf5 75%, #eff0eb00); }
 #dataset-heading h1 { font-size: clamp(23px, 3vw, 34px); font-weight: 550; line-height: 1.2; margin: 12px 0; }
 #dataset-heading p { font-size: 12px; color: #75829a; margin: 8px 0; }
-#dataset-legend { position: fixed; right: 30px; top: 40px; background: #f7f8fce8;
+#dataset-legend { position: fixed; right: 30px; top: 40px; background: #eff0ebe8;
   padding: 12px 16px; border-radius: 10px; pointer-events: none; }
 .dataset-legend-row { display: flex; align-items: center; gap: 9px; font-size: 11px; padding: 4px 0; }
 .dataset-legend-row span { width: 8px; height: 8px; border-radius: 50%; }
@@ -202,10 +202,10 @@ body { background: #f7f8fc; color: #182238; font-family: system-ui, sans-serif; 
 #zoom-layout-slider { width: 100%; margin: 14px 0; accent-color: #5568cb; cursor: pointer; }
 #zoom-layout-status { font-size: 11px; font-variant-numeric: tabular-nums; color: #75829a; }
 #zoom-layout-play { font-size: 11px; border: 1px solid #dbe0ef; border-radius: 6px;
-  padding: 5px 11px; color: #4355ac; background: #f4f6ff; cursor: pointer; }
+  padding: 5px 11px; color: #4355ac; background: #f4f6ff; cursor: pointer; font-family: inherit; }
 #zoom-layout-controls small { display: block; margin-top: 10px; font-size: 10px; color: #8590a4; }
 .dataset-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
-@media (max-width: 650px) { #dataset-heading { top: 18px; left: 20px; }
+@media (max-width: 650px) { #dataset-heading { top: 18px; left: 20px; max-width: calc(100vw - 40px); }
   #dataset-legend { display: none; } #dataset-heading p { max-width: 230px; }
   #zoom-layout-controls { padding: 16px; bottom: 16px; } }
 """
@@ -213,17 +213,38 @@ body { background: #f7f8fc; color: #182238; font-family: system-ui, sans-serif; 
 
 def plot_ui(title, count, noun, class_names, colors, perplexity):
     """Optional example UI; the reusable position helper needs no dataset UI."""
+    from base64 import b64encode
     from html import escape
+    from importlib.metadata import distribution
+
+    # Embed Opinionated's bundled Jost font so notebook iframes do not need a
+    # network request before DataMapPlot's text layers can use it.
+    fonts = Path(distribution("opinionated").locate_file("opinionated/fonts"))
+    font_data = b64encode((fonts / "Jost-VariableFont_wght.ttf").read_bytes()).decode("ascii")
+    license_text = (fonts / "OFL.txt").read_text()
+    license_text = license_text[license_text.index("SIL OPEN FONT LICENSE"):]
+    font_css = f"""/*
+Copyright 2020 The Jost Project Authors (https://github.com/indestructible-type/Jost)
+{license_text}
+*/
+@font-face {{
+  font-family: "Jost";
+  src: url("data:font/ttf;base64,{font_data}") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}}
+"""
     legend = "".join(
         f'<div class="dataset-legend-row"><span style="background:{escape(color)}"></span>{escape(name)}</div>'
         for name, color in zip(class_names, colors)
     )
     inspection = "its image" if noun == "images" else "a document excerpt"
     html = f"""
+<script>document.fonts.load('12px "Jost"');</script>
 <div id="dataset-heading">
-  <span class="dataset-eyebrow">{escape(title.upper())} · {count:,} {noun.upper()} · PERPLEXITY {perplexity:g}</span>
-  <h1>From global to local</h1>
-  <p>Zoom from a global PCA layout toward local t-SNE structure.</p>
+  <h1>From global to local · {escape(title)}</h1>
+  <p>Zoom from a global PCA layout through DREAMS toward local t-SNE structure.</p>
 </div>
 <div id="dataset-legend">{legend}</div>
 <div id="zoom-layout-controls">
@@ -237,4 +258,28 @@ def plot_ui(title, count, noun, class_names, colors, perplexity):
   </div>
   <small>Scroll, pinch, or use the slider. Hover a point to inspect {inspection}.</small>
 </div>"""
-    return html, EXAMPLE_CSS
+    return html, font_css + EXAMPLE_CSS
+
+
+def use_bundled_jost(figure):
+    """Keep the embedded font instead of DataMapPlot's duplicate CDN faces.
+
+    Rewrap the generated HTML using the existing InteractiveFigure constructor;
+    DataMapPlot and its API remain unchanged.
+    """
+    import re
+
+    head, body = str(figure).split("</head>", 1)
+    head = re.sub(
+        r'<link\b[^>]*href="https://fonts\.(?:googleapis|gstatic)\.com[^\"]*"[^>]*>\s*',
+        "", head,
+    )
+    head = re.sub(
+        r"@font-face\s*\{[^{}]*font-family:\s*['\"]Jost['\"];[^{}]*"
+        r"src:\s*url\(https://fonts\.gstatic\.com/[^)]*\)[^{}]*\}\s*",
+        "", head,
+    )
+    return type(figure)(
+        head + "</head>" + body, width=figure.width, height=figure.height,
+        api_token=figure.api_token,
+    )
