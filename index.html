@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Explore Fashion-MNIST, MNIST, and 20 Newsgroups as zoom moves points from global PCA through DREAMS toward local t-SNE.">
+    <title>From global to local · ZoomMap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #eff0eb;
+        color: #182238;
+        font-family: "Jost", sans-serif;
+        line-height: 1.5;
+      }
+      main { max-width: 920px; margin: 0 auto; padding: 80px 32px 48px; }
+      h1 { margin: 0 0 16px; font-size: clamp(36px, 6vw, 56px); font-weight: 600; line-height: 1.1; }
+      .intro { max-width: 640px; font-size: 20px; margin: 0 0 12px; }
+      .instructions { color: #596577; margin: 0 0 44px; }
+      nav { border-top: 1px solid #ccd0c9; }
+      .map-link {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px 24px;
+        padding: 26px 0;
+        border-bottom: 1px solid #ccd0c9;
+        color: inherit;
+        text-decoration: none;
+      }
+      .map-link h2 { margin: 0; font-size: 27px; font-weight: 500; }
+      .map-link p { margin: 4px 0 0; color: #596577; }
+      .map-link .arrow { align-self: center; color: #4355ac; font-size: 28px; }
+      .map-link:hover h2 { color: #4355ac; }
+      a:focus-visible { outline: 3px solid #5568cb; outline-offset: 6px; }
+      footer { margin-top: 36px; color: #596577; font-size: 14px; }
+      footer p { margin: 8px 0; }
+      footer a { color: #4355ac; text-underline-offset: 3px; }
+      @media (max-width: 600px) {
+        main { padding: 44px 22px 32px; }
+        .intro { font-size: 18px; }
+        .map-link { padding: 22px 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>From global to local</h1>
+        <p class="intro">Zoom from a global PCA layout through DREAMS toward local t-SNE structure.</p>
+        <p class="instructions">Choose a dataset, then scroll, pinch, or use the slider. Hover a point to inspect an image or document.</p>
+      </header>
+      <nav aria-label="Interactive maps">
+        <a class="map-link" href="artifacts/fashion_mnist_zoom.html">
+          <div>
+            <h2>Fashion-MNIST</h2>
+            <p>Clothing images · 50-dimensional PCA features</p>
+          </div>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="map-link" href="artifacts/mnist_zoom.html">
+          <div>
+            <h2>MNIST</h2>
+            <p>Handwritten digits · 50-dimensional PCA features</p>
+          </div>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="map-link" href="artifacts/20_newsgroups_zoom.html">
+          <div>
+            <h2>20 Newsgroups · MPNet</h2>
+            <p>Discussion posts · 768-dimensional sentence embeddings</p>
+          </div>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </nav>
+      <footer>
+        <p>Each map uses 5,000 observations, six layouts, and perplexity 150.</p>
+        <p><a href="https://github.com/MNoichl/zoommap">Source code</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/notebooks/general_example.ipynb">Example notebook</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

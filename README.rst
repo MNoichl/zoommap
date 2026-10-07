@@ -41,6 +41,23 @@ settings and quality reports are kept in ``artifacts/`` and versioned.
 The exported HTML maps need no Python or notebook server to view. Like normal
 DataMapPlot exports, they load JavaScript dependencies from CDNs.
 
+GitHub Pages
+------------
+
+The root ``index.html`` links directly to the three exported maps. Enable Pages
+under repository Settings → Pages, choose **Deploy from a branch**, then select
+``main`` and ``/(root)``. The root ``.nojekyll`` file serves the generated HTML
+directly, without Jekyll processing. No build or notebook execution is needed.
+
+Once Pages is enabled, the landing page is https://mnoichl.github.io/zoommap/:
+
+* `Fashion-MNIST <https://mnoichl.github.io/zoommap/artifacts/fashion_mnist_zoom.html>`_
+* `MNIST <https://mnoichl.github.io/zoommap/artifacts/mnist_zoom.html>`_
+* `20 Newsgroups · MPNet <https://mnoichl.github.io/zoommap/artifacts/20_newsgroups_zoom.html>`_
+
+Rerunning the notebook replaces the same HTML files; pushing the updated maps
+to ``main`` updates their existing Pages links.
+
 Reproduction settings
 ---------------------
 
