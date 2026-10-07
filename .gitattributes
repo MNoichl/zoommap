@@ -1,0 +1,4 @@
+# Preserve DataMapPlot's generated HTML formatting and keep it out of code reviews.
+artifacts/* linguist-generated=true
+artifacts/*.html whitespace=-blank-at-eol
+*.npz binary

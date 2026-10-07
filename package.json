@@ -1,0 +1,10 @@
+{
+  "name": "zoommap-browser-checks",
+  "private": true,
+  "scripts": {
+    "test:browser": "node tests/browser_check.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

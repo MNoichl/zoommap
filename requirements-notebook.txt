@@ -1,0 +1,4 @@
+# Run from zoommap/. Both upstream repositories are unmodified and pinned.
+datamapplot @ git+https://github.com/TutteInstitute/datamapplot.git@81e9f4283ac97f68b93aa5490ef0278613529b45
+-e .[notebook,test]
+openTSNE @ git+https://github.com/berenslab/DREAMS.git@eeea6a6985ded4fa926e4176a9dbd002eae14228
