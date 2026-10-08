@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Explore Fashion-MNIST, MNIST, and 20 Newsgroups as zoom moves points from global PCA through DREAMS toward local t-SNE.">
+    <meta name="description" content="Explore Fashion-MNIST, MNIST, and 20 Newsgroups from global to local structure with DREAMS and NE-spectrum.">
     <title>From global to local · ZoomMap</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,19 +23,22 @@
       .intro { max-width: 640px; font-size: 20px; margin: 0 0 12px; }
       .instructions { color: #596577; margin: 0 0 44px; }
       nav { border-top: 1px solid #ccd0c9; }
-      .map-link {
+      .dataset-row {
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 8px 24px;
         padding: 26px 0;
         border-bottom: 1px solid #ccd0c9;
-        color: inherit;
-        text-decoration: none;
       }
-      .map-link h2 { margin: 0; font-size: 27px; font-weight: 500; }
-      .map-link p { margin: 4px 0 0; color: #596577; }
-      .map-link .arrow { align-self: center; color: #4355ac; font-size: 28px; }
-      .map-link:hover h2 { color: #4355ac; }
+      .dataset-row h2 { margin: 0; font-size: 27px; font-weight: 500; }
+      .dataset-row p { margin: 4px 0 0; color: #596577; }
+      .technique-links { display: flex; align-items: center; gap: 12px; }
+      .map-link {
+        display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px;
+        border: 1px solid #ccd0c9; border-radius: 8px; color: #4355ac;
+        text-decoration: none; white-space: nowrap; font-size: 15px;
+      }
+      .map-link:hover { background: #ffffff80; border-color: #5568cb; }
       a:focus-visible { outline: 3px solid #5568cb; outline-offset: 6px; }
       footer { margin-top: 36px; color: #596577; font-size: 14px; }
       footer p { margin: 8px 0; }
@@ -43,7 +46,7 @@
       @media (max-width: 600px) {
         main { padding: 44px 22px 32px; }
         .intro { font-size: 18px; }
-        .map-link { padding: 22px 0; }
+        .dataset-row { grid-template-columns: 1fr; gap: 16px; padding: 22px 0; }
       }
     </style>
   </head>
@@ -51,36 +54,44 @@
     <main>
       <header>
         <h1>From global to local</h1>
-        <p class="intro">Zoom from a global PCA layout through DREAMS toward local t-SNE structure.</p>
-        <p class="instructions">Choose a dataset, then scroll, pinch, or use the slider. Hover a point to inspect an image or document.</p>
+        <p class="intro">Zoom from global structure toward local t-SNE with DREAMS and NE-spectrum.</p>
+        <p class="instructions">Choose a dataset and technique, then scroll, pinch, or use the slider. Hover a point to inspect an image or document.</p>
       </header>
-      <nav aria-label="Interactive maps">
-        <a class="map-link" href="artifacts/fashion_mnist_zoom.html">
+      <nav aria-label="Maps by dataset and technique">
+        <div class="dataset-row">
           <div>
             <h2>Fashion-MNIST</h2>
             <p>Clothing images · 50-dimensional PCA features</p>
           </div>
-          <span class="arrow" aria-hidden="true">↗</span>
-        </a>
-        <a class="map-link" href="artifacts/mnist_zoom.html">
+          <div class="technique-links">
+            <a class="map-link" href="artifacts/fashion_mnist_zoom.html" aria-label="Fashion-MNIST with DREAMS">DREAMS <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="ne_spectrum/artifacts/fashion_mnist_zoom.html" aria-label="Fashion-MNIST with NE-spectrum">NE-spectrum <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <div class="dataset-row">
           <div>
             <h2>MNIST</h2>
             <p>Handwritten digits · 50-dimensional PCA features</p>
           </div>
-          <span class="arrow" aria-hidden="true">↗</span>
-        </a>
-        <a class="map-link" href="artifacts/20_newsgroups_zoom.html">
+          <div class="technique-links">
+            <a class="map-link" href="artifacts/mnist_zoom.html" aria-label="MNIST with DREAMS">DREAMS <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="ne_spectrum/artifacts/mnist_zoom.html" aria-label="MNIST with NE-spectrum">NE-spectrum <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <div class="dataset-row">
           <div>
             <h2>20 Newsgroups · MPNet</h2>
             <p>Discussion posts · 768-dimensional sentence embeddings</p>
           </div>
-          <span class="arrow" aria-hidden="true">↗</span>
-        </a>
+          <div class="technique-links">
+            <a class="map-link" href="artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with DREAMS">DREAMS <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="ne_spectrum/artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with NE-spectrum">NE-spectrum <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
       </nav>
       <footer>
         <p>Each map uses 5,000 observations, six layouts, and perplexity 150.</p>
-        <p><a href="https://github.com/MNoichl/zoommap">Source code</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/notebooks/general_example.ipynb">Example notebook</a></p>
-      <p><a href="ne_spectrum/">Compare the NE-spectrum maps</a></p>
+        <p><a href="https://github.com/MNoichl/zoommap">Source code</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/notebooks/general_example.ipynb">DREAMS notebook</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/ne_spectrum/general_example.ipynb">NE-spectrum notebook</a></p>
       </footer>
     </main>
   </body>
