@@ -7,8 +7,11 @@ process.env.PLAYWRIGHT_BROWSERS_PATH ||= path.join(root, '.browser-cache');
 const { chromium } = require('playwright');
 const baseUrl = process.env.ZOOMMAP_BASE_URL || 'http://127.0.0.1:8788';
 const chrome = process.env.CHROME_EXECUTABLE_PATH;
-const names = ['fashion_mnist', 'mnist', '20_newsgroups'];
-const titles = ['Fashion-MNIST', 'MNIST', '20 Newsgroups · MPNet'];
+const allNames = ['fashion_mnist', 'mnist', '20_newsgroups', 'mammoth'];
+const names = process.env.ZOOMMAP_DATASETS ? process.env.ZOOMMAP_DATASETS.split(',') : allNames;
+assert(names.every(name => allNames.includes(name)), 'Unknown ZOOMMAP_DATASETS value');
+const titles = { fashion_mnist: 'Fashion-MNIST', mnist: 'MNIST',
+  '20_newsgroups': '20 Newsgroups · MPNet', mammoth: 'Mammoth' };
 const neSpectrum = process.env.ZOOMMAP_TECHNIQUE === 'ne-spectrum';
 const dreamsP30 = process.env.ZOOMMAP_TECHNIQUE === 'dreams-p30';
 const slogan = neSpectrum ?
@@ -86,7 +89,7 @@ async function waitForLayout(context, zoom) {
         };
       });
       assert.equal(initial.count, 5000);
-      const title = 'From global to local · ' + titles[names.indexOf(name)];
+      const title = 'From global to local · ' + titles[name];
       assert.equal(await page.title(), title);
       assert.equal(await page.locator('#dataset-heading h1').innerText(), title);
       assert.equal(await page.locator('.dataset-eyebrow').count(), 0);
@@ -164,9 +167,13 @@ async function waitForLayout(context, zoom) {
       await page.waitForFunction(text => document.querySelector('.deck-tooltip')?.textContent.includes(text),
         prefix + point.id, { timeout: 10000, polling: 100 });
       const tooltip = page.locator('.deck-tooltip');
-      assert.equal(await tooltip.locator('img').count(), name === '20_newsgroups' ? 0 : 1);
+      assert.equal(await tooltip.locator('img').count(), ['mnist', 'fashion_mnist'].includes(name) ? 1 : 0);
       if (name === '20_newsgroups') {
         assert((await tooltip.locator('[style*="white-space:pre-wrap"]').innerText()).length > 0);
+      }
+      if (name === 'mammoth') {
+        assert((await tooltip.innerText()).includes('Original 3D coordinates:'));
+        assert((await tooltip.innerText()).includes('Spatial region'));
       }
       await page.getByRole('button', { name: 'Animate', exact: true }).click();
       await page.getByRole('button', { name: 'Stop', exact: true }).click();
@@ -181,9 +188,9 @@ async function waitForLayout(context, zoom) {
       .filter(html => html?.includes('<iframe')));
     await page.goto('about:blank');
     await page.setContent(embeds.join('\n'), { waitUntil: 'domcontentloaded' });
-    assert.equal(await page.locator('iframe').count(), names.length);
+    assert.equal(await page.locator('iframe').count(), allNames.length);
     for (let i = 0; i < names.length; i++) {
-      const element = page.locator('iframe').nth(i);
+      const element = page.locator('iframe').nth(allNames.indexOf(names[i]));
       await element.scrollIntoViewIfNeeded();
       const frame = await (await element.elementHandle()).contentFrame();
       await frame.waitForFunction(() => Boolean(window.zoomPositions), null, { timeout: 60000, polling: 100 });
@@ -192,11 +199,11 @@ async function waitForLayout(context, zoom) {
       assert((await frame.locator('#zoom-layout-status').innerText()).includes(neSpectrum ? 'ρ=2' : 'λ=0.15'));
       await checkQuality(frame, 1.25);
       assert.equal(await frame.locator('#dataset-heading h1').innerText(),
-        'From global to local · ' + titles[i]);
+        'From global to local · ' + titles[names[i]]);
       console.log('PASS notebook iframe: ' + names[i]);
     }
     assert.deepEqual(errors, []);
-    console.log('PASS all three notebook displays; no JavaScript page errors');
+    console.log('PASS ' + names.length + ' notebook displays; no JavaScript page errors');
   } finally {
     await browser.close();
   }

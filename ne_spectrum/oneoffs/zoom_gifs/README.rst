@@ -1,12 +1,13 @@
 NE-spectrum zoom captures
 ========================
 
-Three text-free, 480x480 GIFs capture the exported NE-spectrum maps: 12 seconds,
+Four text-free, 480x480 GIFs capture the exported NE-spectrum maps: 12 seconds,
 20 frames per second, seamless infinite loops, and the #eff0eb background.
 
 * `Fashion-MNIST <https://mnoichl.github.io/zoommap/ne_spectrum/oneoffs/zoom_gifs/fashion_mnist.gif>`_
 * `MNIST <https://mnoichl.github.io/zoommap/ne_spectrum/oneoffs/zoom_gifs/mnist.gif>`_
 * `20 Newsgroups / MPNet <https://mnoichl.github.io/zoommap/ne_spectrum/oneoffs/zoom_gifs/20_newsgroups.gif>`_
+* `Mammoth <https://mnoichl.github.io/zoommap/ne_spectrum/oneoffs/zoom_gifs/mammoth.gif>`_
 
 Run from zoommap/ after executing ne_spectrum/general_example.ipynb::
 
@@ -23,3 +24,5 @@ shows the selected dense neighborhood at maximum zoom. Cosine timing drives the
 zoom in and out; spatial interpolation remains the map's linear interpolation.
 
 The original DREAMS captures and generator remain in oneoffs/zoom_gifs/.
+
+Set ``ZOOMMAP_DATASETS=mammoth`` to regenerate only the Mammoth capture.

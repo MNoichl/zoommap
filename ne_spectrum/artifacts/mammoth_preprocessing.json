@@ -1,0 +1,21 @@
+{
+  "source": "https://github.com/MNoichl/UMAP-examples-mammoth",
+  "source_revision": "d98f5ba768e88d51662406f240e0c47e15c10bb7",
+  "source_url": "https://raw.githubusercontent.com/MNoichl/UMAP-examples-mammoth/d98f5ba768e88d51662406f240e0c47e15c10bb7/mammoth_a.csv",
+  "source_sha256": "1eeaefc45ac1f4b05ba24379ae404838655c613ad95bb7d91cbd7fcb02f0f86c",
+  "source_credit": "Smithsonian Institution, Mammuthus primigenius 3D scan",
+  "source_model": "https://3d.si.edu/object/3d/mammuthus-primigenius-blumbach:341c96cd-f967-4540-8ed1-d3fc56d31f12",
+  "source_citation": "https://doi.org/10.5281/zenodo.17290165",
+  "original_points": 999778,
+  "selected_points": 5000,
+  "sampling": "uniform without replacement, original CSV row order",
+  "pca_components": 3,
+  "pca_explained_variance": 1.0,
+  "pca_policy": "center and rotate all XYZ dimensions, no whitening or per-axis scaling",
+  "color_policy": "12 Ward spatial regions, ordered by original XYZ centroids; display only",
+  "color_reference_points": 5000,
+  "color_extension": "10-neighbor vote when sample exceeds 5000",
+  "seed": 42,
+  "requested_sample_size": 5000,
+  "actual_sample_size": 5000
+}

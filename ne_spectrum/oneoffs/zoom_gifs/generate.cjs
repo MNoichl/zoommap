@@ -11,7 +11,9 @@ if (!process.env.PLAYWRIGHT_BROWSERS_PATH && fs.existsSync(path.join(root, '.bro
   process.env.PLAYWRIGHT_BROWSERS_PATH = path.join(root, '.browser-cache');
 }
 const { chromium } = require('playwright');
-const names = ['fashion_mnist', 'mnist', '20_newsgroups'];
+const allNames = ['fashion_mnist', 'mnist', '20_newsgroups', 'mammoth'];
+const names = process.env.ZOOMMAP_DATASETS ? process.env.ZOOMMAP_DATASETS.split(',') : allNames;
+assert(names.every(name => allNames.includes(name)), 'Unknown ZOOMMAP_DATASETS value');
 const size = 480;
 const fps = 20;
 const seconds = 12;

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Compare DREAMS at perplexity 150 and 30 with NE-spectrum at 30 on Fashion-MNIST, MNIST, and 20 Newsgroups.">
+    <meta name="description" content="Compare DREAMS at perplexity 150 and 30 with NE-spectrum at 30 on Fashion-MNIST, MNIST, 20 Newsgroups, and Mammoth.">
     <title>From global to local · ZoomMap</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,9 +91,21 @@
             <a class="map-link" href="ne_spectrum/artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with NE-spectrum at perplexity 30">NE-spectrum · 30 <span aria-hidden="true">↗</span></a>
           </div>
         </div>
+        <div class="dataset-row">
+          <div>
+            <h2>Mammoth</h2>
+            <p>Smithsonian 3D point cloud · colors mark spatial regions</p>
+          </div>
+          <div class="technique-links">
+            <a class="map-link" href="artifacts/mammoth_zoom.html" aria-label="Mammoth with DREAMS at perplexity 150">DREAMS · 150 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="dreams_p30/artifacts/mammoth_zoom.html" aria-label="Mammoth with DREAMS at perplexity 30">DREAMS · 30 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="ne_spectrum/artifacts/mammoth_zoom.html" aria-label="Mammoth with NE-spectrum at perplexity 30">NE-spectrum · 30 <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
       </nav>
       <footer>
         <p>Each map uses the same 5,000 observations. Both DREAMS versions use six layouts; NE-spectrum uses 28. The slider shows neighbor recall and global distance correlation.</p>
+        <p>Mammoth data: <a href="https://github.com/MNoichl/UMAP-examples-mammoth">Noichl</a>, from the <a href="https://3d.si.edu/object/3d/mammuthus-primigenius-blumbach:341c96cd-f967-4540-8ed1-d3fc56d31f12">Smithsonian 3D scan</a>.</p>
         <p><a href="https://github.com/MNoichl/zoommap">Source code</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/notebooks/general_example.ipynb">DREAMS 150 notebook</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/dreams_p30/general_example.ipynb">DREAMS 30 notebook and comparison</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/ne_spectrum/general_example.ipynb">NE-spectrum notebook</a></p>
       </footer>
     </main>

@@ -239,7 +239,8 @@ Copyright 2020 The Jost Project Authors (https://github.com/indestructible-type/
         f'<div class="dataset-legend-row"><span style="background:{escape(color)}"></span>{escape(name)}</div>'
         for name, color in zip(class_names, colors)
     )
-    inspection = "its image" if noun == "images" else "a document excerpt"
+    inspection = {"images": "its image", "documents": "a document excerpt",
+                  "points": "its original 3D coordinates"}[noun]
     html = f"""
 <script>document.fonts.load('12px "Jost"');</script>
 <div id="dataset-heading">

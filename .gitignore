@@ -20,5 +20,9 @@ artifacts/*
 !artifacts/fashion_mnist_report.csv
 !artifacts/mnist_report.csv
 !artifacts/20_newsgroups_report.csv
+!artifacts/mammoth_zoom.html
+!artifacts/mammoth_layouts.npz
+!artifacts/mammoth_preprocessing.json
+!artifacts/mammoth_report.csv
 !artifacts/general_example_report.csv
 !artifacts/quality_metrics/

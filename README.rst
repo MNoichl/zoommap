@@ -5,13 +5,15 @@ From global to local
 DataMapPlot's existing ``custom_js`` parameter; the DataMapPlot source and public
 plotting API stay unchanged.
 
-``notebooks/general_example.ipynb`` produces the three final interactive maps:
+``notebooks/general_example.ipynb`` produces four final interactive maps:
 
 * ``artifacts/fashion_mnist_zoom.html`` — Fashion-MNIST, PCA-50 pixel features.
 * ``artifacts/mnist_zoom.html`` — MNIST digits, PCA-50 pixel features.
 * ``artifacts/20_newsgroups_zoom.html`` — 20 Newsgroups, MPNet sentence embeddings.
+* ``artifacts/mammoth_zoom.html`` — Mammoth, original XYZ point-cloud distances.
 
-Each dataset uses 5,000 balanced training observations, perplexity 150, and six
+Each dataset uses 5,000 observations (balanced image/topic samples, uniformly
+sampled Mammoth points), perplexity 150, and six
 layouts at lambda = 1, 0.5, 0.25, 0.15, 0.05, 0. The PCA endpoint is analytic;
 intermediate layouts use the authors' DREAMS fork, and the local endpoint is t-SNE.
 Each optimized layout initializes the next while the PCA regularization anchor
@@ -35,7 +37,7 @@ extensions, so a C/C++ compiler is required (Xcode Command Line Tools on macOS).
 The first run downloads the training datasets and MPNet weights, encodes the text,
 and fits the layouts. Later runs reuse caches under ``data/``. Dataset downloads,
 model weights, optimizer caches, virtual environments and browser tools are local
-and ignored by Git. The three final maps, coordinate archives, preprocessing
+and ignored by Git. The four final maps, coordinate archives, preprocessing
 settings and quality reports are kept in ``artifacts/`` and versioned.
 
 The exported HTML maps need no Python or notebook server to view. Like normal
@@ -44,8 +46,8 @@ DataMapPlot exports, they load JavaScript dependencies from CDNs.
 GitHub Pages
 ------------
 
-The root ``index.html`` links directly to the three exported maps. Enable Pages
-under repository Settings → Pages, choose **Deploy from a branch**, then select
+The root ``index.html`` links to all four datasets with DREAMS at 150 and 30
+and NE-spectrum at 30. Enable Pages under repository Settings → Pages, choose **Deploy from a branch**, then select
 ``main`` and ``/(root)``. The root ``.nojekyll`` file serves the generated HTML
 directly, without Jekyll processing. No build or notebook execution is needed.
 
@@ -54,12 +56,28 @@ Once Pages is enabled, the landing page is https://mnoichl.github.io/zoommap/:
 * `Fashion-MNIST <https://mnoichl.github.io/zoommap/artifacts/fashion_mnist_zoom.html>`_
 * `MNIST <https://mnoichl.github.io/zoommap/artifacts/mnist_zoom.html>`_
 * `20 Newsgroups · MPNet <https://mnoichl.github.io/zoommap/artifacts/20_newsgroups_zoom.html>`_
+* `Mammoth <https://mnoichl.github.io/zoommap/artifacts/mammoth_zoom.html>`_
 
 Rerunning the notebook replaces the same HTML files; pushing the updated maps
 to ``main`` updates their existing Pages links.
 
 Reproduction settings
 ---------------------
+
+Mammoth uses the original ``mammoth_a.csv`` from
+`Noichl's dataset repository <https://github.com/MNoichl/UMAP-examples-mammoth>`_,
+pinned to revision ``d98f5ba768e88d51662406f240e0c47e15c10bb7``. A seeded,
+uniform sample without replacement retains original CSV row IDs. A full PCA
+rotation keeps all three XYZ dimensions, without whitening or per-axis scaling,
+so original Euclidean distances are preserved. The same points and features are
+used in all three variants. Twelve Ward spatial regions provide display colors
+only; they are not anatomical labels or optimizer inputs. For samples larger
+than 5,000, regions are fitted to a seeded 5,000-point reference and extended by
+10-neighbor voting. Hover shows original XYZ coordinates, and each notebook also
+shows the original 3D cloud. Provenance records the CSV checksum and source.
+Dataset citation: `Noichl (2025) <https://doi.org/10.5281/zenodo.17290165>`_.
+Original scan: `Smithsonian Institution, Mammuthus primigenius
+<https://3d.si.edu/object/3d/mammuthus-primigenius-blumbach:341c96cd-f967-4540-8ed1-d3fc56d31f12>`_.
 
 Images use grayscale pixels divided by 255 and seeded PCA-50. 20 Newsgroups uses
 the training split with headers, footers and quotes removed; empty cleaned texts
@@ -101,14 +119,14 @@ Repository structure
 --------------------
 
 * ``src/zoommap/`` — reusable Python keyframe API and JavaScript position updates.
-* ``notebooks/general_example.ipynb`` — the single executed example for all three datasets.
+* ``notebooks/general_example.ipynb`` — the executed example for all four datasets.
 * ``notebooks/dataset_helpers.py`` — dataset loading, sampling, image PCA and hover metadata.
 * ``notebooks/text_embeddings.py`` — pinned sentence embeddings and document cache.
 * ``notebooks/experiment_helpers.py`` — DREAMS fits, alignment, quality scores and map UI.
 * ``notebooks/controls.js`` — zoom slider and animation controls.
 * ``notebooks/execute.py`` — execute and save the notebook.
 * ``tests/`` — position, dataset, embedding cache, continuation and browser checks.
-* ``artifacts/`` — the three final maps and their coordinate/provenance/quality records.
+* ``artifacts/`` — the four final maps and their coordinate/provenance/quality records.
 
 Minimal plotting API::
 
@@ -186,15 +204,15 @@ The independent NE-spectrum notebook, environment, maps and GIFs are documented
 in ``ne_spectrum/README.rst``. It uses the authors' native attraction-exaggeration
 sweep and upstream openTSNE, leaving the DREAMS fits and environment intact.
 
-A separate ``dreams_p30/`` notebook and three maps repeat DREAMS at perplexity 30
+A separate ``dreams_p30/`` notebook and four maps repeat DREAMS at perplexity 30
 while preserving the original p=150 outputs. All other fitting and display
 settings match. Its ``artifacts/perplexity_comparison.csv`` compares both versions
 using their identical 1,000-observation slider metric references. See
 ``dreams_p30/README.rst`` for execution and browser validation. The root overview
 links to DREAMS at both perplexities and NE-spectrum at perplexity 30.
 
-The examples use class/topic colors and image/document tooltips. Position-dependent
-labels, hulls, edges, density tiles, minimaps, annotations and lasso indices require
+The examples use class/topic or spatial-region colors and image/document/XYZ
+tooltips. Position-dependent labels, hulls, edges, density tiles, minimaps, annotations and lasso indices require
 their own updates and should not be enabled yet. Updating coordinates globally can
 move a cluster away from the location being zoomed into; the helper leaves ordinary
 camera behavior intact. A future camera-anchor policy can address that separately.
@@ -213,8 +231,8 @@ In another terminal from the project root::
 
     npm run test:browser
 
-These checks inspect all three maps and the executed notebook's iframe outputs:
-six keyframes, reverse motion, wheel zoom, stable point attributes, image/document
+These checks inspect all four maps and the executed notebook's iframe outputs:
+six keyframes, reverse motion, wheel zoom, stable point attributes, image/document/XYZ
 hover content, animation and the page titles. ``CHROME_EXECUTABLE_PATH`` and
 ``ZOOMMAP_BASE_URL`` override the browser executable and preview URL.
 

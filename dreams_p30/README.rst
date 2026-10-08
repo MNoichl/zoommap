@@ -18,6 +18,10 @@ kernel. Downloads and normalized MPNet vectors are shared from root ``data/``.
 Optimizer, quality and plotting caches are isolated under ``dreams_p30/data/``;
 the executed notebook and final outputs live under ``dreams_p30/``.
 
+Fashion-MNIST, MNIST, 20 Newsgroups and Mammoth share the same observations and
+features across all variants. Mammoth uses original 3D distances, a uniform sample
+and display-only spatial-region colors, as documented in ../README.rst.
+
 The slider and endpoint reports use 10-neighbor recall over all observations
 and global distance Spearman over 1,000 fixed sampled observations. The
 ``artifacts/perplexity_comparison.csv`` table compares the original p=150 slider

@@ -11,10 +11,11 @@ reuse its affinities, with 1,000 iterations per slide and perplexity 30.
 The global endpoint is an optimized neighbor embedding; rho=1 is ordinary
 t-SNE. The moderate rho=8 start keeps the global layouts two-dimensional.
 
-`Open the three maps <https://mnoichl.github.io/zoommap/ne_spectrum/>`_.
+`Open the four maps <https://mnoichl.github.io/zoommap/ne_spectrum/>`_.
 Their original DREAMS counterparts remain at the root landing page.
 Both versions have the same Jost / Opinionated aesthetic, #eff0eb background,
-5,000 observations, colors, hover metadata and unequal zoom offsets.
+5,000 observations, colors, image/document/XYZ hover metadata and unequal zoom
+offsets.
 Coordinates use linear interpolation with linear easing.
 
 Relation to the papers
@@ -48,8 +49,9 @@ The finer grid includes rho=4 as an actual optimized layout. Its zoom offsets
 are interpolated in log-rho between the original six zoom anchors, retaining
 the existing uneven allocation of camera magnification. Browser interpolation
 still blends coordinates between fitted layouts; it does not optimize a new rho.
-Perplexity 30 matches the earlier paper's default. The DREAMS sequence retains
-perplexity 150, so the two methods now use different neighborhood settings.
+Perplexity 30 matches the earlier paper's default. The root DREAMS sequence retains
+perplexity 150; the separate dreams_p30/ sequence provides a matching-perplexity
+comparison at 30.
 Larger perplexity smooths over broader neighborhoods and can mix nearby groups;
 smaller perplexity emphasizes closer neighbors and can separate local groups.
 This change does not control drawing opacity or imply universally better quality.
@@ -72,8 +74,10 @@ NE-spectrum is pinned to c980702a2594ee628fc86c36902f8c699c80b67e,
 upstream openTSNE to 1.0.4, and DataMapPlot to the same revision as DREAMS.
 
 The shared dataset loaders reuse root ``data/`` downloads and normalized MPNet
-vectors. Matching preprocessing dependencies make the feature arrays and row
-IDs identical to DREAMS. NE-spectrum optimizer caches, plotting caches and
+vectors. Mammoth uniformly samples the pinned original XYZ cloud, retains all
+three PCA dimensions and uses spatial-region colors only. Its source and
+provenance are documented in ../README.rst. Matching preprocessing dependencies
+make the feature arrays and row IDs identical to DREAMS. NE-spectrum optimizer caches, plotting caches and
 runtime files live in ``ne_spectrum/data/``; its outputs live in
 ``ne_spectrum/artifacts/``. The native sequence is cached atomically, keyed by
 processed features, ordered row IDs, ordered attraction settings, optimizer
@@ -123,5 +127,5 @@ In another terminal::
 
 Browser checks require the root Playwright setup described in ../README.rst.
 The GIF generator additionally requires FFmpeg. Its separate folder contains
-three square, text-free, dense-region zoom-in/out captures. DREAMS GIFs are kept
+four square, text-free, dense-region zoom-in/out captures. DREAMS GIFs are kept
 unchanged in ../oneoffs/zoom_gifs/.

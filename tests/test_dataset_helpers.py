@@ -14,6 +14,62 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "notebooks"))
 import dataset_helpers as helpers
 
 
+def mammoth_source(directory, count=120):
+    directory.mkdir(parents=True, exist_ok=True)
+    points = np.random.default_rng(7).normal(size=(count, 3)) * [3, 10, 40]
+    points += [75, 150, 200]
+    helpers.pd.DataFrame(points, columns=["x", "y", "z"]).to_csv(
+        directory / f"mammoth-{helpers.MAMMOTH_REVISION}.csv", index=False,
+    )
+    return points
+
+
+def test_mammoth_preserves_xyz_geometry_identity_and_uniform_sample(tmp_path):
+    points = mammoth_source(tmp_path / "mammoth")
+    dataset = helpers.load_example_dataset("mammoth", tmp_path, sample_size=60, seed=42)
+    expected_ids = np.sort(np.random.default_rng(42).choice(len(points), 60, replace=False))
+    np.testing.assert_array_equal(dataset.sample_ids, expected_ids)
+    np.testing.assert_allclose(pdist(dataset.features), pdist(points[expected_ids]), atol=1e-12)
+    assert dataset.features.shape == (60, 3)
+    assert dataset.noun == "points"
+    assert len(dataset.class_names) == len(dataset.colors) == 12
+    np.testing.assert_array_equal(np.unique(dataset.labels), np.arange(12))
+    np.testing.assert_array_equal(dataset.extra_data.sample_id, expected_ids)
+    for i, axis in enumerate(["x", "y", "z"]):
+        assert dataset.extra_data[axis].tolist() == [f"{v:.3f}" for v in points[expected_ids, i]]
+    repeat = helpers.load_example_dataset("mammoth", tmp_path, sample_size=60, seed=42)
+    np.testing.assert_array_equal(dataset.features, repeat.features)
+    np.testing.assert_array_equal(dataset.labels, repeat.labels)
+    assert dataset.preprocessing == repeat.preprocessing
+    assert dataset.preprocessing["source_revision"] == helpers.MAMMOTH_REVISION
+    assert len(dataset.preprocessing["source_sha256"]) == 64
+    assert "not anatomical labels" in dataset.tooltip
+
+
+def test_mammoth_full_sample_keeps_original_rows(tmp_path):
+    points = mammoth_source(tmp_path, count=36)
+    dataset = helpers.load_mammoth(tmp_path, sample_size=None)
+    np.testing.assert_array_equal(dataset.sample_ids, np.arange(len(points)))
+    np.testing.assert_allclose(pdist(dataset.features), pdist(points), atol=1e-12)
+
+
+@pytest.mark.parametrize("size", [0, 11, 121, 30.5])
+def test_mammoth_rejects_invalid_samples(tmp_path, size):
+    mammoth_source(tmp_path)
+    with pytest.raises(ValueError, match="sample_size"):
+        helpers.load_mammoth(tmp_path, sample_size=size)
+
+
+def test_mammoth_rejects_nonfinite_source(tmp_path):
+    mammoth_source(tmp_path)
+    target = tmp_path / f"mammoth-{helpers.MAMMOTH_REVISION}.csv"
+    source = helpers.pd.read_csv(target)
+    source.loc[0, "z"] = np.inf
+    source.to_csv(target, index=False)
+    with pytest.raises(ValueError, match="finite XYZ"):
+        helpers.load_mammoth(tmp_path)
+
+
 def test_balanced_sample_is_reproducible_sorted_and_keeps_original_indices():
     labels = np.repeat(np.arange(4), [6, 9, 8, 10])
     ids = helpers.balanced_indices(labels, 12, seed=42)
