@@ -14,7 +14,7 @@ NE_SPECTRUM_COMMIT = "c980702a2594ee628fc86c36902f8c699c80b67e"
 
 
 def fit_ne_spectrum(features, sample_ids, exaggerations, cache_directory, *,
-                    seed=42, n_iter=500, n_jobs=4, perplexity=150):
+                    seed=42, n_iter=1000, n_jobs=4, perplexity=30):
     """Use the package's native continuation, reusing affinities and prior fits.
 
     High attraction exaggeration emphasizes global neighbor structure. rho=1

@@ -1,0 +1,37 @@
+{
+  "source": "scikit-learn fetch_20newsgroups",
+  "subset": "train",
+  "remove": [
+    "headers",
+    "footers",
+    "quotes"
+  ],
+  "original_documents": 11314,
+  "usable_documents": 11014,
+  "selected_documents": 5000,
+  "text_representation": "mpnet",
+  "document_filter": "nonempty cleaned text",
+  "documents": 5000,
+  "embedding_dtype": "float32",
+  "long_document_policy": "truncate each cleaned document to max_seq_length wordpieces",
+  "max_seq_length": 384,
+  "model": "sentence-transformers/all-mpnet-base-v2",
+  "model_revision": "e8c3b32edf5434bc2275fc9bab85f82640a19130",
+  "normalize_embeddings": true,
+  "package_versions": {
+    "sentence-transformers": "5.7.0",
+    "torch": "2.14.1",
+    "transformers": "5.19.0"
+  },
+  "sample_ids_sha256": "762882b09fe192c1bf66837d3b5451beed14b862784d91bc72bd2198fa99286d",
+  "texts_sha256": "43e43d7cea4958b838af4a676d8d6d269e9b5e02db824c4211e14b18a68ae94e",
+  "embedding_dimensions": 768,
+  "embedding_cache": "data/20_newsgroups/text-embeddings/embeddings-7d8e8a806322fa66.npz",
+  "embedding_device": "mps:0",
+  "pca_components": 768,
+  "pca_explained_variance": 0.9999999999999999,
+  "pca_policy": "center and rotate all normalized semantic dimensions",
+  "seed": 42,
+  "requested_sample_size": 5000,
+  "actual_sample_size": 5000
+}

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Explore Fashion-MNIST, MNIST, and 20 Newsgroups from global to local structure with DREAMS and NE-spectrum.">
+    <meta name="description" content="Compare DREAMS at perplexity 150 and 30 with NE-spectrum at 30 on Fashion-MNIST, MNIST, and 20 Newsgroups.">
     <title>From global to local · ZoomMap</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +32,7 @@
       }
       .dataset-row h2 { margin: 0; font-size: 27px; font-weight: 500; }
       .dataset-row p { margin: 4px 0 0; color: #596577; }
-      .technique-links { display: flex; align-items: center; gap: 12px; }
+      .technique-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
       .map-link {
         display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px;
         border: 1px solid #ccd0c9; border-radius: 8px; color: #4355ac;
@@ -55,7 +55,7 @@
       <header>
         <h1>From global to local</h1>
         <p class="intro">Zoom from global structure toward local t-SNE with DREAMS and NE-spectrum.</p>
-        <p class="instructions">Choose a dataset and technique, then scroll, pinch, or use the slider. Hover a point to inspect an image or document.</p>
+        <p class="instructions">Compare DREAMS at perplexity 150 and 30, or explore NE-spectrum at 30. Scroll, pinch, or use the slider; hover a point to inspect it.</p>
       </header>
       <nav aria-label="Maps by dataset and technique">
         <div class="dataset-row">
@@ -64,8 +64,9 @@
             <p>Clothing images · 50-dimensional PCA features</p>
           </div>
           <div class="technique-links">
-            <a class="map-link" href="artifacts/fashion_mnist_zoom.html" aria-label="Fashion-MNIST with DREAMS">DREAMS <span aria-hidden="true">↗</span></a>
-            <a class="map-link" href="ne_spectrum/artifacts/fashion_mnist_zoom.html" aria-label="Fashion-MNIST with NE-spectrum">NE-spectrum <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="artifacts/fashion_mnist_zoom.html" aria-label="Fashion-MNIST with DREAMS at perplexity 150">DREAMS · 150 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="dreams_p30/artifacts/fashion_mnist_zoom.html" aria-label="Fashion-MNIST with DREAMS at perplexity 30">DREAMS · 30 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="ne_spectrum/artifacts/fashion_mnist_zoom.html" aria-label="Fashion-MNIST with NE-spectrum at perplexity 30">NE-spectrum · 30 <span aria-hidden="true">↗</span></a>
           </div>
         </div>
         <div class="dataset-row">
@@ -74,8 +75,9 @@
             <p>Handwritten digits · 50-dimensional PCA features</p>
           </div>
           <div class="technique-links">
-            <a class="map-link" href="artifacts/mnist_zoom.html" aria-label="MNIST with DREAMS">DREAMS <span aria-hidden="true">↗</span></a>
-            <a class="map-link" href="ne_spectrum/artifacts/mnist_zoom.html" aria-label="MNIST with NE-spectrum">NE-spectrum <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="artifacts/mnist_zoom.html" aria-label="MNIST with DREAMS at perplexity 150">DREAMS · 150 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="dreams_p30/artifacts/mnist_zoom.html" aria-label="MNIST with DREAMS at perplexity 30">DREAMS · 30 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="ne_spectrum/artifacts/mnist_zoom.html" aria-label="MNIST with NE-spectrum at perplexity 30">NE-spectrum · 30 <span aria-hidden="true">↗</span></a>
           </div>
         </div>
         <div class="dataset-row">
@@ -84,14 +86,15 @@
             <p>Discussion posts · 768-dimensional sentence embeddings</p>
           </div>
           <div class="technique-links">
-            <a class="map-link" href="artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with DREAMS">DREAMS <span aria-hidden="true">↗</span></a>
-            <a class="map-link" href="ne_spectrum/artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with NE-spectrum">NE-spectrum <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with DREAMS at perplexity 150">DREAMS · 150 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="dreams_p30/artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with DREAMS at perplexity 30">DREAMS · 30 <span aria-hidden="true">↗</span></a>
+            <a class="map-link" href="ne_spectrum/artifacts/20_newsgroups_zoom.html" aria-label="20 Newsgroups with NE-spectrum at perplexity 30">NE-spectrum · 30 <span aria-hidden="true">↗</span></a>
           </div>
         </div>
       </nav>
       <footer>
-        <p>Each map uses 5,000 observations, six layouts, and perplexity 150.</p>
-        <p><a href="https://github.com/MNoichl/zoommap">Source code</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/notebooks/general_example.ipynb">DREAMS notebook</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/ne_spectrum/general_example.ipynb">NE-spectrum notebook</a></p>
+        <p>Each map uses the same 5,000 observations. Both DREAMS versions use six layouts; NE-spectrum uses 28. The slider shows neighbor recall and global distance correlation.</p>
+        <p><a href="https://github.com/MNoichl/zoommap">Source code</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/notebooks/general_example.ipynb">DREAMS 150 notebook</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/dreams_p30/general_example.ipynb">DREAMS 30 notebook and comparison</a> · <a href="https://github.com/MNoichl/zoommap/blob/main/ne_spectrum/general_example.ipynb">NE-spectrum notebook</a></p>
       </footer>
     </main>
   </body>

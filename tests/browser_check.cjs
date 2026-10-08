@@ -10,6 +10,7 @@ const chrome = process.env.CHROME_EXECUTABLE_PATH;
 const names = ['fashion_mnist', 'mnist', '20_newsgroups'];
 const titles = ['Fashion-MNIST', 'MNIST', '20 Newsgroups · MPNet'];
 const neSpectrum = process.env.ZOOMMAP_TECHNIQUE === 'ne-spectrum';
+const dreamsP30 = process.env.ZOOMMAP_TECHNIQUE === 'dreams-p30';
 const slogan = neSpectrum ?
   'Zoom from global neighbor structure through NE-spectrum toward local t-SNE structure.' :
   'Zoom from a global PCA layout through DREAMS toward local t-SNE structure.';
@@ -63,7 +64,16 @@ async function waitForLayout(context, zoom) {
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
     const errors = [];
-    page.on('pageerror', error => errors.push(error.message));
+    page.on('pageerror', error => {
+      errors.push(error.message);
+      console.error('Page error at ' + page.url() + ': ' + error.message);
+    });
+    page.on('requestfailed', request => {
+      const failure = request.failure()?.errorText;
+      if (failure !== 'net::ERR_ABORTED') {
+        console.error('Request failed: ' + request.url().slice(0, 200) + ' · ' + failure);
+      }
+    });
     for (const name of names) {
       await page.goto(baseUrl + '/' + name + '_zoom.html', { waitUntil: 'domcontentloaded' });
       await page.waitForFunction(() => Boolean(window.zoomPositions && datamap.metaData),
@@ -84,7 +94,9 @@ async function waitForLayout(context, zoom) {
         slogan);
       assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
         'rgb(239, 240, 235)');
-      for (const zoom of await page.evaluate(() => zoomPositions.zooms)) {
+      const zooms = await page.evaluate(() => zoomPositions.zooms);
+      assert.equal(zooms.length, neSpectrum ? 28 : 6);
+      for (const zoom of zooms) {
         await page.evaluate(z => zoomPositions.setZoom(z), zoom);
         await waitForLayout(page, zoom);
         await checkQuality(page, zoom);
@@ -158,10 +170,11 @@ async function waitForLayout(context, zoom) {
       }
       await page.getByRole('button', { name: 'Animate', exact: true }).click();
       await page.getByRole('button', { name: 'Stop', exact: true }).click();
-      console.log('PASS ' + name + ': 5,000 points, six keyframes, preserved attributes, reverse, wheel, hover, animation and dynamic metrics');
+      console.log('PASS ' + name + ': 5,000 points, ' + zooms.length + ' keyframes, preserved attributes, reverse, wheel, hover, animation and dynamic metrics');
     }
     const notebook = JSON.parse(fs.readFileSync(path.join(root,
-      neSpectrum ? 'ne_spectrum/general_example.ipynb' : 'notebooks/general_example.ipynb')));
+      neSpectrum ? 'ne_spectrum/general_example.ipynb' :
+        dreamsP30 ? 'dreams_p30/general_example.ipynb' : 'notebooks/general_example.ipynb')));
     const embeds = notebook.cells.flatMap(cell => (cell.outputs || [])
       .map(output => output.data?.['text/html'])
       .map(html => Array.isArray(html) ? html.join('') : html)

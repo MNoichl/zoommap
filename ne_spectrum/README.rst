@@ -4,9 +4,10 @@ From global to local with NE-spectrum
 This is a separate experiment using the authors' unmodified
 `NE-spectrum package <https://github.com/sciai-lab/ne-spectrum>`_.
 Its native ``TSNESpectrum`` backend varies t-SNE attraction exaggeration
-through ``[8, 6, 3, 2, 1.5, 1]``. The first optimized layout starts from
+through 28 settings sampled in log-rho from 8 to 1, including exact values at
+``[8, 6, 4, 3, 2, 1.5, 1]``. The first optimized layout starts from
 scaled PCA. Subsequent slides continue from the preceding raw embedding and
-reuse its affinities, with 500 iterations per slide and perplexity 150.
+reuse its affinities, with 1,000 iterations per slide and perplexity 30.
 The global endpoint is an optimized neighbor embedding; rho=1 is ordinary
 t-SNE. The moderate rho=8 start keeps the global layouts two-dimensional.
 
@@ -15,6 +16,43 @@ Their original DREAMS counterparts remain at the root landing page.
 Both versions have the same Jost / Opinionated aesthetic, #eff0eb background,
 5,000 observations, colors, hover metadata and unequal zoom offsets.
 Coordinates use linear interpolation with linear easing.
+
+Relation to the papers
+----------------------
+
+The MNIST figure in `Attraction-Repulsion Spectrum in Neighbor Embeddings
+<https://www.jmlr.org/papers/v23/21-0055.html>`_ uses all 70,000 digits,
+PCA-50 and default perplexity 30. Section 3.6 reports 750 iterations,
+scaled PCA initialization and early exaggeration at 12 when rho < 12.
+The `original figure implementation
+<https://github.com/berenslab/ne-spectrum/blob/master/jnb_msc/transformer/tsne.py>`_
+uses 250 early iterations followed by 500 iterations at the target rho.
+Those plots initialize separate fits from PCA rather than following our
+warm-started sequence. The learning rate is n / max(rho, rho_early).
+Our upstream openTSNE defaults instead select n / rho for each continuation step.
+Their UMAP comparison uses a=b=1; rho around 4 often produces similar layouts,
+but this correspondence is empirical and varies across datasets.
+
+The later paper's `reproduction script
+<https://github.com/berenslab/ne_spectrum_scRNAseq/blob/main/scripts/compute_embds.py>`_
+uses 60 logarithmically spaced TSNE-spectrum settings from 30 to 0.85 and seeds
+0, 1, 2 on the human brain-organoid dataset. The native package defaults to
+500 iterations for the first fit and 50 for subsequent warm-started slides,
+with no separate early exaggeration. We retain that continuation policy but
+explicitly increase every slide to 1,000 iterations. Our narrower range,
+5,000-observation subsets and warm starts mean this example
+is not an exact reproduction of the earlier MNIST figure. More iterations alone
+do not guarantee convergence or a closer visual match.
+
+The finer grid includes rho=4 as an actual optimized layout. Its zoom offsets
+are interpolated in log-rho between the original six zoom anchors, retaining
+the existing uneven allocation of camera magnification. Browser interpolation
+still blends coordinates between fitted layouts; it does not optimize a new rho.
+Perplexity 30 matches the earlier paper's default. The DREAMS sequence retains
+perplexity 150, so the two methods now use different neighborhood settings.
+Larger perplexity smooths over broader neighborhoods and can mix nearby groups;
+smaller perplexity emphasizes closer neighbors and can separate local groups.
+This change does not control drawing opacity or imply universally better quality.
 
 Installation and execution
 --------------------------

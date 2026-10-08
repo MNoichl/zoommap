@@ -186,6 +186,13 @@ The independent NE-spectrum notebook, environment, maps and GIFs are documented
 in ``ne_spectrum/README.rst``. It uses the authors' native attraction-exaggeration
 sweep and upstream openTSNE, leaving the DREAMS fits and environment intact.
 
+A separate ``dreams_p30/`` notebook and three maps repeat DREAMS at perplexity 30
+while preserving the original p=150 outputs. All other fitting and display
+settings match. Its ``artifacts/perplexity_comparison.csv`` compares both versions
+using their identical 1,000-observation slider metric references. See
+``dreams_p30/README.rst`` for execution and browser validation. The root overview
+links to DREAMS at both perplexities and NE-spectrum at perplexity 30.
+
 The examples use class/topic colors and image/document tooltips. Position-dependent
 labels, hulls, edges, density tiles, minimaps, annotations and lasso indices require
 their own updates and should not be enabled yet. Updating coordinates globally can

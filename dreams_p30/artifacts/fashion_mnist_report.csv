@@ -1,0 +1,7 @@
+dataset,lambda,method,cached,compute_seconds,initialization,early_exaggeration_iter,perplexity,zoom_offset,rms_motion_to_next,nn_recall,global_distance_spearman
+fashion_mnist,1.0,PCA endpoint,False,0.000403750003897585,analytic PCA,0,30,0.0,0.7281716465950012,0.09602,0.9010469441662076
+fashion_mnist,0.5,DREAMS,False,249.48232200001075,scaled PCA,250,30,0.7,0.5542722344398499,0.41858,0.8787940116278612
+fashion_mnist,0.25,DREAMS,False,156.1938157090044,lambda=0.5,0,30,1.05,0.36272457242012024,0.4952,0.8538592772776646
+fashion_mnist,0.15,DREAMS,False,319.11210612500145,lambda=0.25,0,30,1.25,0.935316801071167,0.50674,0.8381098267875124
+fashion_mnist,0.05,DREAMS,False,149.78136454201012,lambda=0.15,0,30,1.55,0.7764216065406799,0.5124,0.786049149907871
+fashion_mnist,0.0,t-SNE endpoint,False,152.52452300000004,lambda=0.05,0,30,2.5,,0.51166,0.7352659427848949
